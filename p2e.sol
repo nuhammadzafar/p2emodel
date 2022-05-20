@@ -266,7 +266,7 @@ contract ScholarMarket is SMAuth, ReentrancyGuard {
             require(scholarManagerLimit[msg.sender][wallet]==0);
             
             nftContract.transferFrom(msg.sender, address(this), nftId);
-            bmnContract.transferFrom(wallet, address(this ),price );
+            bmnContract.transferFrom(wallet, address(this ),price*matchesAllowed );
             
             uint256 endTime = block.timestamp + 250;
             nftManager[nftId] = Hired(
@@ -323,7 +323,7 @@ contract ScholarMarket is SMAuth, ReentrancyGuard {
         require(nftManager[nftId].accepted == 0);
         address manager_ = nftManager[nftId].manager;
         nftContract.transfer(manager_, nftId);
-         bmnContract.transfer(manager_,  price);
+         bmnContract.transfer(manager_,  price * nftManager[nftId].matchesAllowed);
          nftManager[nftId] = Hired(
                 msg.sender,
                 0x0000000000000000000000000000000000000000,
